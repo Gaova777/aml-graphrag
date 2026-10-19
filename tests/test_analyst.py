@@ -8,7 +8,7 @@ DATA = {"timestep": np.array([35, 35, 35, 36])}
 SCORES = {"random_forest": np.array([0.2, 0.93, 0.5, 0.9]), "graphsage": np.array([0.1, 0.81, 0.3, 0.2])}
 THRESHOLDS = {"random_forest": 0.41, "graphsage": 0.6}
 NEIGHBORS = {"inputs": 1, "outputs": 2, "n_1hop": 3, "n_2hop": 7, "risky_1hop": 1, "risky_2hop": 4}
-EXPLANATION = {"neighborhood": 11, "stability": 0.42, "p_full": 0.81, "p_without_top": 0.35, "p_only_top": 0.77,
+EXPLANATION = {"neighborhood": 11, "stability": 0.42, "p_full": 0.81, "p_without_top": 0.35, "p_only_top": 0.77, "p_no_edges": 0.74,
                "edges": [{"text": "Edge 5 -> 6 (touches the alert directly); alert scores 0.88 -> 0.93; importance 0.71."}]}
 
 

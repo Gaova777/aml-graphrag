@@ -32,8 +32,15 @@ def peeling_chain(node, succ: dict, pred: dict, max_len: int = 50) -> int:
     return length
 
 
-def shape(node, succ: dict, pred: dict, fan: int = 5) -> list[str]:
+def shape(node, succ: dict, pred: dict, fan: int = 3) -> list[str]:
+    """Edges only join transactions of the same timestep (about two weeks), so "no outputs" means none of its
+    outputs was spent inside that window, and "no inputs" that it was funded from outside the graph."""
     names = []
+    n_in, n_out = len(pred.get(node, ())), len(succ.get(node, ()))
+    if n_in == 0:
+        names.append("source")
+    if n_in >= 1 and n_out == 0:
+        names.append("end of chain")
     if len(pred.get(node, ())) >= fan:
         names.append("fan-in")
     if len(succ.get(node, ())) >= fan:

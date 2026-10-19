@@ -7,7 +7,7 @@ from tests.fakes import FakeLLM
 
 ALERT = {"tx": 7, "index": 0, "timestep": 40, "label": 1, "rf": 0.9, "gnn": 0.7, "shapes": ["fan-in"],
          "neighbors": {"inputs": 6, "outputs": 1, "n_1hop": 7, "n_2hop": 20, "risky_1hop": 2, "risky_2hop": 5},
-         "explanation": {"stability": 0.4, "neighborhood": 28, "p_full": 0.7, "p_without_top": 0.2, "p_only_top": 0.6,
+         "explanation": {"stability": 0.4, "neighborhood": 28, "p_full": 0.7, "p_without_top": 0.2, "p_only_top": 0.6, "p_no_edges": 0.6,
                          "edges": []},
          "facts": {"rf_score": "Alert score 0.90."}}
 

@@ -95,7 +95,7 @@ def main(args):
                      "rf": round(float(rf[i]), 4), "gnn": round(float(gnn[i]), 4), "shapes": "|".join(shapes),
                      "neighborhood": exp["neighborhood"], "stability": round(exp["stability"], 4),
                      "p_full": round(exp["p_full"], 4), "p_without_top": round(exp["p_without_top"], 4),
-                     "p_only_top": round(exp["p_only_top"], 4)})
+                     "p_only_top": round(exp["p_only_top"], 4), "p_no_edges": round(exp["p_no_edges"], 4)})
         graphs[alerts[-1]["tx"]] = neighborhood(i, exp["edges"], succ, pred, d, rf, args.max_nodes)
         if n % 10 == 0:
             print(f"  {n}/{len(chosen)}", flush=True)
@@ -109,8 +109,10 @@ def main(args):
         writer.writerows(rows)
     s = np.array([r["stability"] for r in rows])
     drop = np.array([r["p_full"] - r["p_without_top"] for r in rows])
+    alone = np.array([abs(r["p_full"] - r["p_no_edges"]) for r in rows])
     print(f"stability: median {np.median(s):.2f}, below 0.5 for {np.mean(s < 0.5):.0%}; "
-          f"score drop without the top edges: median {np.median(drop):.2f}")
+          f"score drop without the top edges: median {np.median(drop):.2f}; "
+          f"score within 0.1 of the no-edge score for {np.mean(alone < 0.1):.0%}")
 
 
 if __name__ == "__main__":

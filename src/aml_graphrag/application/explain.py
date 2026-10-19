@@ -10,8 +10,9 @@ def explain(model, x, edge_index, node: int, seeds=range(5), k: int = 5, hops: i
     """GNNExplainer once per seed on the node's computation graph.
 
     stability: mean pairwise Jaccard of the top-k edges across seeds (the thesis' measure).
-    fidelity: the model's illicit probability with the full neighborhood, without the k consensus edges, and with
-    only them. If removing them doesn't move the score, they weren't the reason, however stable they are.
+    fidelity: the model's illicit probability with the full neighborhood, without the k consensus edges, with only
+    them, and with no edges at all. If removing them doesn't move the score, they weren't the reason, however
+    stable they are; if the score is the same with no edges, the graph wasn't the reason either.
     """
     subset, sub_edges, center, _ = k_hop_subgraph(node, hops, edge_index, relabel_nodes=True)
     sub_x, center = x[subset], int(center)
@@ -45,4 +46,5 @@ def explain(model, x, edge_index, node: int, seeds=range(5), k: int = 5, hops: i
         "p_full": prob(torch.ones(len(pairs), dtype=torch.bool)),
         "p_without_top": prob(~in_top),
         "p_only_top": prob(in_top),
+        "p_no_edges": prob(torch.zeros(len(pairs), dtype=torch.bool)),
     }

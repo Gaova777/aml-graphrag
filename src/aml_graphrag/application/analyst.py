@@ -68,7 +68,8 @@ def transaction_facts(i, data, scores, thresholds, neighbors, shapes, explanatio
         "risky_neighbors": f"{neighbors['risky_1hop']} of its {neighbors['n_1hop']} direct neighbors and "
                            f"{neighbors['risky_2hop']} of its {neighbors['n_2hop']} neighbors two steps away are above "
                            f"the alert threshold themselves.",
-        "shape": "Graph shape: " + (", ".join(shapes) if shapes else "no fan-in, fan-out or peeling chain") + ".",
+        "shape": "Graph shape: " + (", ".join(shapes) if shapes else "none of fan-in, fan-out, peeling chain, "
+                                    "source or end of chain") + ".",
     }
     if explanation:
         facts["explanation"] = (
@@ -77,7 +78,8 @@ def transaction_facts(i, data, scores, thresholds, neighbors, shapes, explanatio
             f"{explanation['stability']:.2f} (1 = same edges every run; below 0.5 the explanation is unstable).")
         facts["fidelity"] = (
             f"Graph model score with the whole neighborhood {explanation['p_full']:.2f}, without the 5 highlighted "
-            f"edges {explanation['p_without_top']:.2f}, with only those edges {explanation['p_only_top']:.2f}.")
+            f"edges {explanation['p_without_top']:.2f}, with only those edges {explanation['p_only_top']:.2f}, with no "
+            f"edges at all (its own features only) {explanation['p_no_edges']:.2f}.")
         for n, e in enumerate(explanation["edges"], 1):
             facts[f"edge_{n}"] = e["text"]
     return facts
@@ -87,6 +89,8 @@ def typology_query(shapes: list[str]) -> str:
     """What to look up in the encyclopedia side for a transaction with these shapes."""
     words = {"fan-in": "many sources pooled into one, structuring, smurfing, mixing",
              "fan-out": "funds split and sent to many destinations, layering, distribution",
-             "peeling chain": "bitcoin peeling chain, layering through successive transactions, tumbler"}
+             "peeling chain": "bitcoin peeling chain, layering through successive transactions, tumbler",
+             "end of chain": "where laundered funds end up, cashing out, exchanges, final destination of illicit funds",
+             "source": "where illicit bitcoins come from, ransomware payments, darknet market proceeds, hacks"}
     return "Bitcoin money laundering: " + ("; ".join(words[s] for s in shapes) if shapes else
                                           "illicit transactions, darknet markets, ransomware, mixers, exchanges")

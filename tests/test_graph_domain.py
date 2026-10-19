@@ -24,6 +24,8 @@ def test_peeling_chain_follows_one_input_two_outputs():
 
 
 def test_fan_in_and_fan_out():
-    pred = {"x": list(range(6))}
+    pred = {"x": list(range(3))}
     succ = {"x": ["y"]}
     assert shape("x", succ, pred) == ["fan-in"]
+    assert shape("y", succ, {"y": ["x"]}) == ["end of chain"]
+    assert shape("z", {"z": ["a", "b", "c"]}, {}) == ["source", "fan-out"]

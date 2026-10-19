@@ -61,8 +61,8 @@ def transaction_facts(i, data, scores, thresholds, neighbors, shapes, explanatio
     facts = {
         "rf_score": f"Alert score (random forest on the transaction's own features): {rf[i]:.2f}; the alert threshold is "
                     f"{thresholds['random_forest']:.2f}. Rank {rank} of {len(same_step)} transactions in timestep {step}.",
-        "gnn_score": f"Graph model score (GraphSAGE, which also looks at neighboring transactions): {gnn[i]:.2f}; its "
-                     f"threshold is {thresholds['graphsage']:.2f}, so the graph model "
+        "gnn_score": f"Graph model score (GraphSAGE, which also looks at neighboring transactions): {gnn[i]:.3f}; its "
+                     f"threshold is {thresholds['graphsage']:.3f}, so the graph model "
                      + ("agrees with the alert." if gnn[i] >= thresholds["graphsage"] else "does not flag it."),
         "inputs": f"It received bitcoins from {neighbors['inputs']} earlier transactions and sent to "
                   f"{neighbors['outputs']} later ones.",

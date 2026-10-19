@@ -1,0 +1,105 @@
+@if (detail(); as d) {
+  <section class="head">
+    <div>
+      <div class="eyebrow">Alert · timestep {{ d.timestep }}</div>
+      <h2>Transaction {{ d.tx }}</h2>
+    </div>
+    <dl class="kpis">
+      <div>
+        <dt>Alert score</dt>
+        <dd class="risk">{{ d.rf | number: '1.2-2' }}</dd>
+      </div>
+      <div>
+        <dt>Graph model</dt>
+        <dd>{{ d.gnn | number: '1.2-2' }}</dd>
+      </div>
+      <div>
+        <dt>Explanation stability</dt>
+        <dd [class.warn]="unstable()">{{ d.explanation.stability | number: '1.2-2' }}</dd>
+      </div>
+      <div>
+        <dt>Score without top edges</dt>
+        <dd>{{ d.explanation.p_full | number: '1.2-2' }} → {{ d.explanation.p_without_top | number: '1.2-2' }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="grid">
+    <section class="panel graph">
+      <header>
+        <h3>Money flow, two steps around the alert</h3>
+        <span class="legend">
+          <i class="dot red"></i>score ≥ 0.70 <i class="dot amber"></i>≥ 0.40 <i class="dot grey"></i>lower
+          <i class="line"></i>edges the graph model relied on
+        </span>
+      </header>
+      <app-graph-view [nodes]="d.graph.nodes" [edges]="d.graph.edges" [highlight]="highlightIds()" />
+    </section>
+
+    <section class="panel facts">
+      <header>
+        <h3>Evidence</h3>
+        <span class="muted">what the assistant is allowed to cite</span>
+      </header>
+      <table>
+        @for (f of facts(); track f[0]) {
+          <tr [class.lit]="isHovered(f[0])">
+            <th>{{ f[0] }}</th>
+            <td>{{ f[1] }}</td>
+          </tr>
+        }
+      </table>
+    </section>
+
+    <section class="panel answer">
+      <header>
+        <h3>Why was it flagged?</h3>
+        <button (click)="ask()" [disabled]="asking()">
+          {{ asking() ? 'Asking…' : answer() ? 'Ask again' : 'Ask the assistant' }}
+        </button>
+      </header>
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+      @if (answer(); as a) {
+        <p class="summary">{{ a.summary }}</p>
+        <ol class="claims">
+          @for (c of a.claims; track $index) {
+            <li [class]="c.check" (mouseenter)="hovered.set(c.cites)" (mouseleave)="hovered.set([])">
+              <span>{{ c.text }}</span>
+              <span class="cites">
+                @for (id of c.cites; track id) {
+                  <code>{{ id }}</code>
+                }
+                <em>{{ checkLabel[c.check] }}</em>
+              </span>
+            </li>
+          }
+        </ol>
+        @if (a.caveats.length) {
+          <h4>Caveats</h4>
+          <ul class="caveats">
+            @for (c of a.caveats; track $index) {
+              <li>{{ c }}</li>
+            }
+          </ul>
+        }
+        <details>
+          <summary>Background sources the assistant got</summary>
+          @for (s of a.evidence | keyvalue; track s.key) {
+            @if (s.key.startsWith('C')) {
+              <pre><b>[{{ s.key }}]</b> {{ s.value }}</pre>
+            }
+          }
+        </details>
+      } @else if (!asking()) {
+        <p class="muted">
+          The assistant answers from the evidence on the left and the GraphRAG reports that match this transaction's
+          shape. Every claim must cite one of them; claims that don't are marked.
+        </p>
+      }
+    </section>
+  </div>
+} @else {
+  <p class="muted pad">Loading…</p>
+}

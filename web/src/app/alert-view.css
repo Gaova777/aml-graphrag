@@ -1,0 +1,254 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  min-width: 0;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+h2 {
+  margin: 2px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+.kpis {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.kpis div {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-width: 110px;
+}
+dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+dd {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+dd.risk {
+  color: var(--red);
+}
+dd.warn {
+  color: var(--amber-ink);
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  grid-template-rows: 380px auto;
+  gap: 12px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.graph app-graph-view {
+  flex: 1;
+  min-height: 0;
+}
+.facts {
+  grid-row: span 2;
+  overflow: auto;
+}
+table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 12px;
+  font: 500 12px var(--mono);
+  color: var(--blue);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 12px 8px 0;
+  line-height: 1.45;
+}
+tr {
+  border-bottom: 1px solid var(--line);
+}
+tr.lit {
+  background: #ede9fe;
+}
+.answer {
+  padding-bottom: 12px;
+}
+.answer > p,
+.answer > ol,
+.answer > ul,
+.answer > h4,
+.answer > details {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+.summary {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.claims {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.claims li {
+  line-height: 1.45;
+  padding: 4px 6px;
+  border-left: 3px solid var(--green);
+  cursor: default;
+}
+.claims li.no_citation,
+.claims li.bad_citation {
+  border-color: var(--red);
+  background: #fef2f2;
+}
+.claims li.number_mismatch {
+  border-color: var(--amber);
+  background: #fffbeb;
+}
+.claims li:hover {
+  background: #f1f5f9;
+}
+.cites {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+code {
+  font: 11px var(--mono);
+  background: #eff6ff;
+  color: var(--blue);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+em {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: normal;
+}
+h4 {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.caveats {
+  font-size: 13px;
+  line-height: 1.45;
+  padding-left: 18px;
+}
+details {
+  font-size: 12px;
+  margin-top: 8px;
+}
+pre {
+  white-space: pre-wrap;
+  font: 12px/1.45 var(--sans);
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 4px;
+}
+button {
+  background: var(--blue);
+  color: white;
+  border: 0;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font: 500 13px var(--sans);
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.legend {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.red {
+  background: var(--red);
+}
+.amber {
+  background: var(--amber);
+}
+.grey {
+  background: #94a3b8;
+}
+.line {
+  width: 18px;
+  height: 3px;
+  background: var(--blue);
+  display: inline-block;
+  margin-left: 6px;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+.pad {
+  padding: 16px;
+}
+.error {
+  color: var(--red);
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 340px auto auto;
+  }
+  .facts {
+    grid-row: auto;
+  }
+}

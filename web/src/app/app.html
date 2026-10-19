@@ -1,0 +1,58 @@
+<header class="top">
+  <div class="brand"><span class="mark"></span>aml-graphrag</div>
+  <nav>
+    <button [class.on]="tab() === 'alerts'" (click)="tab.set('alerts')">Alert review</button>
+    <button [class.on]="tab() === 'corpus'" (click)="tab.set('corpus')">Typology knowledge graph</button>
+  </nav>
+  <span class="note">Elliptic Bitcoin dataset · test period, timesteps 35–49</span>
+</header>
+
+@if (tab() === 'alerts') {
+  <main class="review">
+    <aside class="queue">
+      <div class="queue-head">
+        <h3>
+          Queue <span>{{ shown().length }}</span>
+        </h3>
+        <select [value]="filter()" (change)="filter.set($any($event.target).value)">
+          <option value="">all shapes</option>
+          <option value="fan-in">fan-in</option>
+          <option value="fan-out">fan-out</option>
+          <option value="peeling chain">peeling chain</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction</th>
+            <th>Step</th>
+            <th>Score</th>
+            <th>Stab.</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of shown(); track a.tx) {
+            <tr [class.sel]="a.tx === selected()" (click)="selected.set(a.tx)">
+              <td>
+                <div class="tx">{{ a.tx }}</div>
+                @for (s of a.shapes; track s) {
+                  <span class="shape">{{ s }}</span>
+                }
+              </td>
+              <td>{{ a.timestep }}</td>
+              <td>
+                <span class="bar"><i [style.width.%]="a.rf * 100"></i></span>{{ a.rf | number: '1.2-2' }}
+              </td>
+              <td [class.unstable]="a.stability < 0.5">{{ a.stability | number: '1.1-1' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </aside>
+    @if (selected(); as tx) {
+      <app-alert-view [tx]="tx" />
+    }
+  </main>
+} @else {
+  <app-communities-view />
+}

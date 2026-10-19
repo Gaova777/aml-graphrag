@@ -8,11 +8,13 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.149.0",
     "httpx>=0.28.1",
     "numpy>=2.5.4",
     "pydantic>=2.14.1",
     "python-igraph>=1.0.0",
     "tiktoken>=0.14.0",
+    "uvicorn[standard]>=0.54.0",
 ]
 
 [build-system]
@@ -21,6 +23,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pytest>=9.1.1",
 ]
 gnn = [
@@ -28,4 +31,7 @@ gnn = [
     "scikit-learn>=1.9.1",
     "torch>=2.14.1",
     "torch-geometric>=2.8.1",
+]
+mlops = [
+    "langfuse>=5.0.2",
 ]

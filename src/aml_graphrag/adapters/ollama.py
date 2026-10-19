@@ -23,12 +23,17 @@ class OllamaLLM:
         body = {"model": self.name, "messages": messages, "stream": False, "think": False, "options": self.options}
         if schema:
             body["format"] = schema
+        if not hasattr(self.tracer, "generation"):
+            return self._post(body)["message"]["content"]
+        with self.tracer.generation(self.name, messages, self.options) as record:
+            reply = self._post(body)
+            record(reply)
+        return reply["message"]["content"]
+
+    def _post(self, body):
         resp = self.client.post(f"{self.url}/api/chat", json=body)
         resp.raise_for_status()
-        reply = resp.json()
-        if self.tracer:
-            self.tracer.generation(self.name, messages, reply)
-        return reply["message"]["content"]
+        return resp.json()
 
 
 class OllamaEmbedder:

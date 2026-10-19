@@ -1,0 +1,12 @@
+__pycache__/
+.venv/
+.pytest_cache/
+*.egg-info/
+data/corpus/raw/
+data/index/
+data/elliptic/
+data/cache/
+web/node_modules/
+web/dist/
+web/.angular/
+.env

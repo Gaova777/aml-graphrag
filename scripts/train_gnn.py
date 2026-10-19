@@ -14,6 +14,7 @@ import numpy as np
 import torch
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import average_precision_score, roc_auc_score
+from torch_geometric.utils import to_undirected
 
 from aml_graphrag.adapters.elliptic import load
 from aml_graphrag.application.gnn import best_f1_threshold, illicit_probability, masks, standardize, train
@@ -31,31 +32,36 @@ def main(args):
     split = masks(d["timestep"], d["y"])
     y = d["y"]
     device = "cuda" if args.cuda and torch.cuda.is_available() else "cpu"
-    xt, et = torch.tensor(x, device=device), torch.tensor(d["edge_index"], device=device)
+    xt = torch.tensor(x, device=device)
     yt = torch.tensor(y, device=device)
     st = {k: torch.tensor(v, device=device) for k, v in split.items()}
 
     results, per_step = {}, []
-    sage_runs = []
-    for seed in range(args.seeds):
-        model, val_pr = train(xt, et, yt, st, seed=seed)
-        p = illicit_probability(model, xt, et).cpu().numpy()
-        threshold = best_f1_threshold(y[split["val"]], p[split["val"]])
-        sage_runs.append({"seed": seed, "threshold": threshold, "val": report(y[split["val"]], p[split["val"]], threshold),
-                          "test": report(y[split["test"]], p[split["test"]], threshold)})
-        print(f"  GraphSAGE seed {seed}: val PR-AUC {val_pr:.3f}, test PR-AUC {sage_runs[-1]['test']['pr_auc']:.3f}", flush=True)
-        if seed == 0:
-            args.models.mkdir(parents=True, exist_ok=True)
-            torch.save({"state": model.state_dict(), "threshold": threshold}, args.models / "graphsage.pt")
-            np.save(args.models / "graphsage_scores.npy", p)
-            sage_p, sage_threshold = p, threshold
-    results["graphsage"] = sage_runs
+    edges = torch.tensor(d["edge_index"], device=device)
+    # as in the thesis, messages follow the money (a transaction hears from the ones that funded it);
+    # "both" also lets it hear from the transactions that spent its outputs
+    for direction, et in [("incoming", edges), ("both", to_undirected(edges))]:
+        runs = []
+        for seed in range(args.seeds):
+            model, val_pr = train(xt, et, yt, st, seed=seed)
+            p = illicit_probability(model, xt, et).cpu().numpy()
+            threshold = best_f1_threshold(y[split["val"]], p[split["val"]])
+            runs.append({"seed": seed, "threshold": threshold, "val": report(y[split["val"]], p[split["val"]], threshold),
+                         "test": report(y[split["test"]], p[split["test"]], threshold)})
+            print(f"  GraphSAGE {direction} seed {seed}: val PR-AUC {val_pr:.3f}, "
+                  f"test PR-AUC {runs[-1]['test']['pr_auc']:.3f}", flush=True)
+            if seed == 0 and direction == "both":
+                args.models.mkdir(parents=True, exist_ok=True)
+                torch.save({"state": model.state_dict(), "threshold": threshold}, args.models / "graphsage.pt")
+                sage_p, sage_threshold = p, threshold
+        results[f"graphsage_{direction}"] = runs
 
     train_idx = split["train"]
     rf = RandomForestClassifier(n_estimators=50, max_features=50, n_jobs=-1, random_state=0)  # Weber et al.'s settings
     rf.fit(x[train_idx], y[train_idx])
     rf_p = rf.predict_proba(x)[:, 1]
     rf_threshold = best_f1_threshold(y[split["val"]], rf_p[split["val"]])
+    np.save(args.models / "scores.npy", np.stack([rf_p, sage_p]))
     results["random_forest"] = {"threshold": rf_threshold, "val": report(y[split["val"]], rf_p[split["val"]], rf_threshold),
                                 "test": report(y[split["test"]], rf_p[split["test"]], rf_threshold)}
 

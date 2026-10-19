@@ -62,7 +62,8 @@ def transaction_facts(i, data, scores, thresholds, neighbors, shapes, explanatio
         "rf_score": f"Alert score (random forest on the transaction's own features): {rf[i]:.2f}; the alert threshold is "
                     f"{thresholds['random_forest']:.2f}. Rank {rank} of {len(same_step)} transactions in timestep {step}.",
         "gnn_score": f"Graph model score (GraphSAGE, which also looks at neighboring transactions): {gnn[i]:.2f}; its "
-                     f"threshold is {thresholds['graphsage']:.2f}.",
+                     f"threshold is {thresholds['graphsage']:.2f}, so the graph model "
+                     + ("agrees with the alert." if gnn[i] >= thresholds["graphsage"] else "does not flag it."),
         "inputs": f"It received bitcoins from {neighbors['inputs']} earlier transactions and sent to "
                   f"{neighbors['outputs']} later ones.",
         "risky_neighbors": f"{neighbors['risky_1hop']} of its {neighbors['n_1hop']} direct neighbors and "
@@ -72,14 +73,17 @@ def transaction_facts(i, data, scores, thresholds, neighbors, shapes, explanatio
                                     "source or end of chain") + ".",
     }
     if explanation:
+        verdict = "illicit" if gnn[i] >= thresholds["graphsage"] else "not illicit"
         facts["explanation"] = (
-            f"GNNExplainer, run 5 times with different seeds on its {explanation['neighborhood']}-transaction "
-            f"neighborhood, agrees on the edges below. Stability (mean Jaccard of the top-5 edges between runs): "
-            f"{explanation['stability']:.2f} (1 = same edges every run; below 0.5 the explanation is unstable).")
+            f"GNNExplainer explains why the graph model scored it as {verdict}. Run 5 times with different seeds on its "
+            f"{explanation['neighborhood']}-transaction neighborhood, it agrees on the edges below. Stability (mean "
+            f"Jaccard of the top-5 edges between runs): {explanation['stability']:.2f} (1 = same edges every run; below "
+            f"0.5 the explanation is unstable).")
         facts["fidelity"] = (
-            f"Graph model score with the whole neighborhood {explanation['p_full']:.2f}, without the 5 highlighted "
-            f"edges {explanation['p_without_top']:.2f}, with only those edges {explanation['p_only_top']:.2f}, with no "
-            f"edges at all (its own features only) {explanation['p_no_edges']:.2f}.")
+            f"Graph model illicit score with the whole neighborhood {explanation['p_full']:.2f}, without the 5 "
+            f"highlighted edges {explanation['p_without_top']:.2f}, with only those edges {explanation['p_only_top']:.2f}, "
+            f"with no edges at all (its own features only) {explanation['p_no_edges']:.2f}. If removing the edges barely "
+            f"changes the score, they are not really why the model decided.")
         for n, e in enumerate(explanation["edges"], 1):
             facts[f"edge_{n}"] = e["text"]
     return facts

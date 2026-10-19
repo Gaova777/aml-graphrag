@@ -108,11 +108,14 @@ def main(args):
         writer.writeheader()
         writer.writerows(rows)
     s = np.array([r["stability"] for r in rows])
-    drop = np.array([r["p_full"] - r["p_without_top"] for r in rows])
-    alone = np.array([abs(r["p_full"] - r["p_no_edges"]) for r in rows])
-    print(f"stability: median {np.median(s):.2f}, below 0.5 for {np.mean(s < 0.5):.0%}; "
-          f"score drop without the top edges: median {np.median(drop):.2f}; "
-          f"score within 0.1 of the no-edge score for {np.mean(alone < 0.1):.0%}")
+    flagged = np.array([r["gnn"] >= thresholds["graphsage"] for r in rows])
+    # fidelity for the class the graph model predicted: how much its probability falls without the top edges
+    sign = np.where(flagged, 1, -1)
+    fall = sign * np.array([r["p_full"] - r["p_without_top"] for r in rows])
+    print(f"stability: median {np.median(s):.2f}, below 0.5 for {np.mean(s < 0.5):.0%}")
+    for name, m in (("graph model agrees", flagged), ("graph model disagrees", ~flagged)):
+        print(f"  {name}: {m.sum()} alerts, stability median {np.median(s[m]):.2f}, removing the top edges lowers the "
+              f"predicted class by 0.1+ for {(fall[m] >= 0.1).sum()}")
 
 
 if __name__ == "__main__":

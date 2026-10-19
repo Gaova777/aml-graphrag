@@ -1,0 +1,110 @@
+# English Wikipedia articles used as the RAG corpus (CC BY-SA 4.0).
+# Techniques and concepts
+Money laundering
+Structuring
+Shell corporation
+Offshore financial centre
+Tax haven
+Hawala
+Informal value transfer system
+Mirror trading
+Correspondent account
+Beneficial ownership
+Politically exposed person
+Know your customer
+Suspicious activity report
+Currency transaction report
+Financial intelligence unit
+Anti-money laundering
+Counter terrorism financing
+Terrorism financing
+Sanctions (law)
+Office of Foreign Assets Control
+Specially Designated Nationals and Blocked Persons List
+Financial Action Task Force
+FATF blacklist
+Egmont Group of Financial Intelligence Units
+Wolfsberg Group
+Bank Secrecy Act
+USA PATRIOT Act
+Anti-Money Laundering Act of 2001
+Proceeds of Crime Act 2002
+Financial Crimes Enforcement Network
+Fraud
+Wire fraud
+Ponzi scheme
+Pyramid scheme
+Embezzlement
+Bribery
+Kleptocracy
+Tax evasion
+Capital flight
+Illicit financial flows
+Black market
+Organized crime
+Drug cartel
+Human trafficking
+# Cryptocurrency and crime
+Cryptocurrency
+Bitcoin
+Blockchain
+Cryptocurrency and crime
+Cryptocurrency tumbler
+Monero
+Zcash
+Tether (cryptocurrency)
+Stablecoin
+Cryptocurrency exchange
+Decentralized finance
+Non-fungible token
+Darknet market
+Ransomware
+Cryptojacking
+Exit scam
+Pig butchering scam
+Blockchain analysis
+Chainalysis
+Elliptic (company)
+# Cases, services and actors
+Silk Road (marketplace)
+Ross Ulbricht
+AlphaBay
+Hydra Market
+Liberty Reserve
+E-gold
+BTC-e
+Alexander Vinnik
+Bitfinex
+2016 Bitfinex hack
+Mt. Gox
+Tornado Cash
+Lazarus Group
+Binance
+Changpeng Zhao
+FTX
+Sam Bankman-Fried
+OneCoin
+Ruja Ignatova
+BitConnect
+Garantex
+Danske Bank money laundering scandal
+1Malaysia Development Berhad scandal
+Jho Low
+Wirecard scandal
+Wachovia
+Standard Chartered
+Russian Laundromat
+Azerbaijani Laundromat
+Panama Papers
+Paradise Papers
+Pandora Papers
+FinCEN Files
+Bank of Credit and Commerce International
+Banco Delta Asia
+Pablo Escobar
+Medellín Cartel
+Cali Cartel
+Sinaloa Cartel
+Odebrecht case
+Operation Car Wash
+Petrobras

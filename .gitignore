@@ -11,3 +11,6 @@ web/dist/
 web/.angular/
 .env
 data/models/
+data/alerts.json
+data/neighborhoods.json
+langfuse/.env

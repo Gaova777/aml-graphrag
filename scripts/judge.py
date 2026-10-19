@@ -1,7 +1,7 @@
 """Head-to-head judging (section 4.1.4): for each question and pair of conditions, a different model judges the two
 answers on comprehensiveness, diversity, empowerment and directness, once in each order.
 
-usage: uv run scripts/judge.py --pairs C0:SS C1:SS C2:SS C1:C0
+usage: uv run scripts/judge.py --pairs C0:SS C1:SS C1:C0
 """
 import argparse
 import csv
@@ -60,7 +60,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pairs", nargs="+", default=["C0:SS", "C1:SS", "C2:SS", "C1:C0"])
+    parser.add_argument("--pairs", nargs="+", default=["C0:SS", "C1:SS", "C1:C0"])
     parser.add_argument("--model", default="qwen3:8b")
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--num-ctx", type=int, default=15360)

@@ -2,7 +2,7 @@
 
 Reads data/index/extractions.jsonl; writes graph.json, communities.json and reports.jsonl (resumable).
 
-usage: uv run scripts/build_index.py --levels 3
+usage: uv run scripts/build_index.py --levels 2
 """
 import argparse
 import json
@@ -61,7 +61,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="qwen3:4b-instruct")
-    parser.add_argument("--levels", type=int, default=3)
+    parser.add_argument("--levels", type=int, default=2)
     parser.add_argument("--max-size", type=int, default=10)
     parser.add_argument("--budget", type=int, default=3000, help="context tokens per report")
     parser.add_argument("--workers", type=int, default=3)

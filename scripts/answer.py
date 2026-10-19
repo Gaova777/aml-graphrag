@@ -3,7 +3,7 @@ TS (the same map-reduce over the source chunks) and SS (vector RAG). Same contex
 
 Answers are appended to results/graphrag/answers.jsonl; rerun to resume.
 
-usage: uv run scripts/answer.py --conditions C0 C1 C2 SS        (needs Ollama with nomic-embed-text)
+usage: uv run scripts/answer.py --conditions C0 C1 SS        (needs Ollama with nomic-embed-text)
 """
 import argparse
 import json
@@ -59,7 +59,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--conditions", nargs="+", default=["C0", "C1", "C2", "SS"])
+    parser.add_argument("--conditions", nargs="+", default=["C0", "C1", "SS"])
     parser.add_argument("--model", default="qwen3:4b-instruct")
     parser.add_argument("--budget", type=int, default=3000, help="context tokens, the same for every condition")
     parser.add_argument("--limit", type=int, default=None)

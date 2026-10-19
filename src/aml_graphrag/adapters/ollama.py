@@ -5,7 +5,7 @@ import httpx
 
 class OllamaLLM:
     def __init__(self, model: str = "qwen3:4b-instruct", url: str = "http://localhost:11434",
-                 num_ctx: int = 10240, temperature: float = 0.0, tracer=None):
+                 num_ctx: int = 15360, temperature: float = 0.0, tracer=None):
         self.name = model
         self.url = url
         self.options = {"num_ctx": num_ctx, "temperature": temperature}

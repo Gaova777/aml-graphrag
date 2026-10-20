@@ -1,0 +1,4 @@
+condition,answers,claims,claims_per_answer,items_cited_per_answer,no_citation,bad_citation,number_mismatch,judged_partly,judged_not_supported,grounded,warns_when_unstable,warns_when_stable,says_graph_model_disagrees
+no_graph,100,237,2.37,1.0,0.0,0.0,0.004,0.034,0.008,0.958,0/56,0/44,0/60
+text_rag,100,299,2.99,3.0,0.0,0.013,0.0,0.017,0.003,0.967,0/56,0/44,0/60
+graph,100,302,3.02,4.59,0.0,0.0,0.01,0.066,0.023,0.904,56/56,17/44,57/60

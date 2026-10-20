@@ -46,6 +46,6 @@ case "${1:-help}" in
              echo "Langfuse on http://localhost:3000" ;;
   langfuse-down) docker compose -f langfuse/docker-compose.yml --env-file langfuse/.env down ;;
   api)       with_langfuse uv run --group mlops uvicorn aml_graphrag.entrypoints.api:app --port 8000 ;;
-  web)       cd web && npm start ;;
+  web)       cd web && PATH=$HOME/.local/opt/node/bin:$PATH npm start ;;
   *)         echo "usage: ./run.sh test|ollama|corpus|index|gnn|evaluate|langfuse|langfuse-down|api|web" ;;
 esac

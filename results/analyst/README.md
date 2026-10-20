@@ -36,16 +36,16 @@ A claim is **grounded** if it passes the code checks and the judge says supporte
 | | no_graph | text_rag | graph |
 |---|---:|---:|---:|
 | claims per answer | 2.4 | 3.0 | 3.0 |
-| distinct items cited per answer | 1.0 | 3.0 | **4.6** |
+| distinct items cited per answer | 1.0 | 3.0 | **5.1** |
 | claims without a citation | 0% | 0% | 0% |
 | citing something it wasn't given | 0% | 1.3% | 0% |
-| numbers that don't match the source | 0.4% | 0% | 1.0% |
+| numbers that don't match the source | 0.4% | 0% | 0.7% |
 | judged only partly supported | 3.4% | 1.7% | 6.6% |
-| judged not supported | 0.8% | 0.3% | 2.3% |
-| **grounded** | **95.8%** | **96.7%** | **90.4%** |
+| judged not supported | 0.8% | 0.3% | 3.0% |
+| **grounded** | **95.8%** | **96.7%** | **90.2%** |
 | warns when the explanation is unstable (stability < 0.5) | – | – | **56 of 56** |
-| warns although the explanation is stable | – | – | 17 of 44 |
-| says the graph model doesn't flag it, when it doesn't | – | – | **57 of 60** |
+| warns although the explanation is stable | – | – | 22 of 44 |
+| says the graph model doesn't flag it, when it doesn't | – | – | **54 of 60** |
 
 And the control: the no_graph condition **without** the rule to cite, as a free answer, on the first 30 alerts
 ([`uncited.jsonl`](uncited.jsonl)):
@@ -65,15 +65,31 @@ the 100 no_graph answers.
   score stays inside what it has: it repeats the score, and that's it. Without the rule it fills the gap with plausible,
   specific, invented reasons in every single answer. That's the failure an analyst can't see coming.
 - **The graph is what makes the answer worth reading.** Only the graph condition tells the analyst something they
-  don't already see on the screen: that the graph model disagrees (57 of 60 times it does), and that the explanation
-  is unstable (all 56 times it is). It cites 4.6 different facts per answer, against one.
+  don't already see on the screen: that the graph model disagrees (54 of the 60 times it does), and that the
+  explanation is unstable (all 56 times it is). It cites 5.1 different facts per answer, against one.
 - **Richer evidence, subtler mistakes.** Grounded claims drop from ~96% to 90% in the graph condition. The errors are
-  readings, not inventions: an edge described as "alert scores 0.24 → 1.00" (the scores of its two ends) became
-  "the edge makes the score jump from 0.24 to 1.00"; "the score barely changes without these edges" when it rose.
-  Their numbers match the source, so only the judge can catch them. That's also a lesson about wording the facts:
-  "0.24 → 1.00" invites a causal reading.
-- **It errs on the side of caution.** It also warns about instability in 17 of the 44 stable explanations. For an
+  readings, not inventions, and their numbers match the source, so only the judge can catch them. See the next section.
+  Another one: "the score barely changes without these edges" when it rose.
+- **It errs on the side of caution.** It also warns about instability in 22 of the 44 stable explanations. For an
   analyst that's the better mistake, but it's a mistake.
+
+## Wording the facts matters
+
+The first version wrote each edge as "Edge A -> B; alert scores 0.24 -> 1.00", meaning the scores of its two ends.
+The model kept reading the arrow as the score *changing* along the edge ("this edge makes the score jump from 0.24 to
+1.00"). It did that in 43 of the 100 graph answers, and again live in the demo. Now each edge says "Alert score of A:
+0.24; of B: 1.00", and I reran the graph condition and its judging. The table above is the rerun; the first run is in
+[`first_wording/`](first_wording).
+
+| graph condition | first wording | reworded |
+|---|---:|---:|
+| answers reading an edge's scores as a change | 43 | **0** |
+| grounded claims | 90.4% | 90.2% |
+| judged not supported | 2.3% | 3.0% |
+
+That specific misreading is gone (a keyword search finds "jumps/drops/increases ... from" in edge claims 43 times
+before, 0 after). The grounded rate didn't move: the remaining errors are of other kinds, mostly over-reading the
+fidelity numbers. For a small model, how a fact is phrased is part of the prompt.
 
 ## Caveats
 

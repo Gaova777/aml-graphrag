@@ -1,0 +1,4 @@
+a,b,questions,comprehensiveness,diversity,empowerment,directness,position_flips
+C0,SS,42,0.768,0.893,0.821,0.738,0.224
+C1,SS,12,0.958,1.0,1.0,1.0,0.021
+C1,C0,12,0.625,0.708,0.625,0.833,0.521

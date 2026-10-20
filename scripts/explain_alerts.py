@@ -83,8 +83,9 @@ def main(args):
             a, b = (a, b) if b in succ[a] else (b, a)  # show the edge the way the money flowed
             touches = "touches the alert directly" if i in (a, b) else "elsewhere in its neighborhood"
             e["source"], e["target"] = int(d["tx_id"][a]), int(d["tx_id"][b])
-            e["text"] = (f"Edge {e['source']} -> {e['target']} ({touches}); alert scores {rf[a]:.2f} -> {rf[b]:.2f}; "
-                         f"importance {e['weight']:.2f}.")
+            # two separate scores, not "0.24 -> 1.00": the arrow was read as the score changing along the edge
+            e["text"] = (f"Edge {e['source']} -> {e['target']} ({touches}). Alert score of {e['source']}: {rf[a]:.2f}; "
+                         f"of {e['target']}: {rf[b]:.2f}. GNNExplainer importance of the edge: {e['weight']:.2f}.")
             del e["pair"]
         shapes = shape(i, succ, pred)
         facts = transaction_facts(i, d, {"random_forest": rf, "graphsage": gnn}, thresholds, neighbors, shapes, exp)
